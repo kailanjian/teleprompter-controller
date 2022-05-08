@@ -10,7 +10,14 @@ function App() {
 
   // CHANGE THIS FOR DEVELOPMENT
   // const ws = new WebSocket('ws://localhost:4444')
-  const ws = new WebSocket('ws://35.165.115.133:4444')
+  let ws;
+  let production = true;
+
+  if (production) {
+    ws = new WebSocket('wss://mythicengineering.com:4444');
+  } else {
+    ws = new WebSocket('ws://35.165.115.133:4444')
+  }
 
   const [loadingSocket, setLoadingSocket] = useState(true)
   const [room, setRoom] = useState(STUB_ROOM ? 'XXXX' : null);
