@@ -8,7 +8,10 @@ import { useState } from 'react';
 function App() {
   const STUB_ROOM = false;
 
+  // CHANGE THIS FOR DEVELOPMENT
   const ws = new WebSocket('ws://localhost:4444')
+  const ws = new WebSocket('ws://35.165.115.133:4444')
+
   const [loadingSocket, setLoadingSocket] = useState(true)
   const [room, setRoom] = useState(STUB_ROOM ? 'XXXX' : null);
 
