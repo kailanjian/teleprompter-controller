@@ -2,6 +2,8 @@
 
 ![frame](https://user-images.githubusercontent.com/3068323/167313173-683bcb90-d437-4a57-8317-d9f38e46937e.png)
 
+Link: [teleprompter controller](https://kailanjian.github.io/teleprompter-controller/)
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -27,7 +29,3 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 ### `npm run deploy`
 
 This will deploy the GH Pages App!
-
-# Credits:
-
-This project was bootstrapped with the help of [Create React App](https://github.com/facebook/create-react-app).
