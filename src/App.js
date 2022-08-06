@@ -9,14 +9,14 @@ function App() {
   const STUB_ROOM = false;
 
   // CHANGE THIS FOR DEVELOPMENT
-  // const ws = new WebSocket('ws://localhost:4444')
   let ws;
-  let production = true;
+  let development = (process.env.NODE_ENV == 'development');
 
-  if (production) {
-    ws = new WebSocket('wss://mythicengineering.com:4444');
+  if (development) {
+    // ws = new WebSocket('ws://35.165.115.133:4444')
+    ws = new WebSocket('ws://localhost:4444');
   } else {
-    ws = new WebSocket('ws://35.165.115.133:4444')
+    ws = new WebSocket('wss://mythicengineering.com:4444');
   }
 
   const [loadingSocket, setLoadingSocket] = useState(true)
