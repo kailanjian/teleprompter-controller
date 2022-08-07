@@ -3,32 +3,20 @@ import { Button, Row, Col, Container, Input } from 'reactstrap';
 
 function TeleprompterController(props) {
   const {
-    ws,
+    socketHelper,
     room
   } = props;
-
-  // extract to helper class
-  const sendMessage = (data) => {
-    console.log('DEBUG: Sending message from controller');
-
-    const msg = {
-      sender: 'controller',
-      id: room,
-      data: data
-    }
-    ws.send(JSON.stringify(msg));
-  }
 
   const sendStateUpdate = (stateChange) => {
 
   }
 
   const sendStartCommand = (data) => {
-    sendMessage({command: 'start'});
+    socketHelper.sendMessage({command: 'start'});
   }
   
   const sendStopCommand = (data) => {
-    sendMessage({command: 'stop'});
+    socketHelper.sendMessage({command: 'stop'});
   }
 
   const sendSkipBackCommand = (data) => {
@@ -60,7 +48,7 @@ function TeleprompterController(props) {
         <Row>
           <Col xs="2">
             <Button onClick={() => {}}>
-              <i class="bi-chevron-double-left"></i>
+              <i className="bi-chevron-double-left"></i>
             </Button>
           </Col>
           <Col xs="8">
@@ -68,7 +56,7 @@ function TeleprompterController(props) {
           </Col>
           <Col xs="2">
             <Button onClick={() => {}}>
-              <i class="bi-chevron-double-right"></i>
+              <i className="bi-chevron-double-right"></i>
             </Button>
           </Col>
         </Row>
@@ -101,22 +89,22 @@ function TeleprompterController(props) {
       <Row>
         <Col xs="3">
           <Button size="lg" onClick={sendStartCommand}>
-            <i class="bi-play-fill"></i>
+            <i className="bi-play-fill"></i>
           </Button>
         </Col>
         <Col xs="3">
           <Button size="lg" onClick={sendStopCommand}>
-            <i class="bi-pause-fill"></i>
+            <i className="bi-pause-fill"></i>
           </Button>
         </Col>
         <Col xs="3">
           <Button size="lg" onClick={sendSkipBackCommand}>
-            <i class="bi-skip-end-fill"></i>
+            <i className="bi-skip-end-fill"></i>
           </Button>
         </Col>
         <Col xs="3">
           <Button size="lg" onClick={sendSkipAheadCommand}>
-            <i class="bi-skip-start-fill"></i>
+            <i className="bi-skip-start-fill"></i>
           </Button>
         </Col>
       </Row>
