@@ -1,9 +1,7 @@
-import { useState } from 'react';
-import { Button, Row, Col, Container, Input } from 'reactstrap';
 
-function TeleprompterController(props) {
+function SocketHelper(props) {
   const {
-    ws,
+    developmentMode,
     room
   } = props;
 
@@ -124,4 +122,4 @@ function TeleprompterController(props) {
   );
 }
 
-export default TeleprompterController;
+export default SocketHelper;

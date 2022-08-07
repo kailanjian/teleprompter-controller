@@ -6,7 +6,7 @@ import { Spinner } from 'reactstrap';
 import { useState } from 'react';
 
 function App() {
-  const STUB_ROOM = false;
+  const STUB_ROOM = true;
 
   // CHANGE THIS FOR DEVELOPMENT
   let ws;
