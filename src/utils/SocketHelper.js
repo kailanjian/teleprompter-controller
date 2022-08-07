@@ -1,6 +1,28 @@
 
 function SocketHelper(developmentMode) {
 
+  // WEBSOCKET PROTOCOL
+  // every message must have three components:
+  // 1. sender: 'controller' or 'client'
+  // 2. id: 4 letter identifier of the channel
+  // 3. data: the actual message
+  //
+  // to pick a room, we will:
+  // send {command: 'pick_room', room_code: 'XXXX'}
+  // receive {command: 'ack_pick_room', room_code: 'XXXX'}
+  // 
+  // to initialize, we will:
+  // send {command: 'init_me'}
+  // receive {command: 'ack_init_me', state: {...}}
+  //
+  // to receive an update we will:
+  // receive {command: 'update', state: {...}}
+  // send {command: 'ack_update'}
+  //
+  // to send an update we will:
+  // send {command: 'update', state: {...}}
+  // receive {command: 'ack_update'}
+
   let ws = undefined;
   let room = undefined;
   let socketOpen = false;
@@ -44,7 +66,6 @@ function SocketHelper(developmentMode) {
   }
 
   // const sendStateUpdate = (stateChange) => {
-
   // }
 
   // const sendStartCommand = (data) => {
