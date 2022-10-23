@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import RoomInput from './components/RoomInput'
 import TeleprompterController from './views/TeleprompterController';
@@ -10,12 +9,12 @@ function App() {
   const STUB_ROOM = false;
 
   // CHANGE THIS FOR DEVELOPMENT
-  let development = (process.env.NODE_ENV == 'development');
+  let development = (process.env.NODE_ENV === 'development');
 
   const [loadingSocket, setLoadingSocket] = useState(true)
   const [room, setRoom] = useState(STUB_ROOM ? 'XXXX' : null);
 
-  const socketHelper = new SocketHelper(development);
+  const socketHelper = new SocketHelper(development, room);
 
   socketHelper.onSocketOpen(() => {
     console.log('DEBUG: Connected to websocket!');

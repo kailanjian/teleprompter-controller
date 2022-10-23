@@ -1,4 +1,4 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import { Button, Row, Col, Container, Input } from 'reactstrap';
 
 function TeleprompterController(props) {
@@ -7,9 +7,9 @@ function TeleprompterController(props) {
     room
   } = props;
 
-  const sendStateUpdate = (stateChange) => {
+  // const sendStateUpdate = (stateChange) => {
 
-  }
+  // }
 
   const sendStartCommand = (data) => {
     socketHelper.sendMessage({command: 'start'});

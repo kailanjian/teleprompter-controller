@@ -1,5 +1,5 @@
 
-function SocketHelper(developmentMode) {
+function SocketHelper(developmentMode, room) {
 
   // WEBSOCKET PROTOCOL
   // every message must have three components:
@@ -24,7 +24,6 @@ function SocketHelper(developmentMode) {
   // receive {command: 'ack_update'}
 
   let ws = undefined;
-  let room = undefined;
   let socketOpen = false;
 
   if (developmentMode) {
@@ -42,20 +41,20 @@ function SocketHelper(developmentMode) {
     if (socketOpen) {
       cb();
     } else {
-      ws.onopen = () => {
+      ws.addEventListener('open', () => {
         cb();
-      }
+      });
     }
   }
 
   const sendMessage = (data) => {
-    console.log('DEBUG: Sending message from controller');
-
     const msg = {
       sender: 'controller',
       id: room,
       data: data
     }
+
+    console.log(`DEBUG: Sending message from controller ${JSON.stringify(msg)}`);
 
     ws.send(JSON.stringify(msg));
   }
