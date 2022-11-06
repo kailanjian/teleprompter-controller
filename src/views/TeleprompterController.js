@@ -1,4 +1,4 @@
-// import { useState } from 'react';
+import { useState } from 'react';
 import { Button, Row, Col, Container, Input } from 'reactstrap';
 
 function TeleprompterController(props) {
@@ -7,9 +7,9 @@ function TeleprompterController(props) {
     room
   } = props;
 
-  // const sendStateUpdate = (stateChange) => {
-
-  // }
+  const requestState = (data) => {
+    socketHelper.sendMessage({command: 'send_state_info'});
+  }
 
   const sendStartCommand = (data) => {
     socketHelper.sendMessage({command: 'start'});
@@ -20,12 +20,21 @@ function TeleprompterController(props) {
   }
 
   const sendSkipBackCommand = (data) => {
-    console.debug('not implemented');
+    socketHelper.sendMessage({command: 'skip_back'});
   }
 
   const sendSkipAheadCommand = (data) => {
-    console.debug('not implemented');
+    socketHelper.sendMessage({command: 'skip_ahead'});
   }
+
+  const sendMirrorCommand = (data) => {
+    socketHelper.sendMessage({command: 'mirror'});
+  }
+
+  socketHelper.onMessage((event) => {
+    console.log(event);
+  });
+
 
   return (
     <Container fluid={true}>
@@ -44,67 +53,79 @@ function TeleprompterController(props) {
           </div>
         </Col>
       </Row>
-      <Row className='border-bottom'>
-        <Row>
-          <Col xs="2">
-            <Button onClick={() => {}}>
-              <i className="bi-chevron-double-left"></i>
-            </Button>
-          </Col>
-          <Col xs="8">
-            <Input type="text" onClick={() => {}} />
-          </Col>
-          <Col xs="2">
-            <Button onClick={() => {}}>
-              <i className="bi-chevron-double-right"></i>
-            </Button>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs="2">
-            <Button onClick={() => {}}>
-              <i className='bi-zoom-out'></i>
-            </Button>
-          </Col>
-          <Col xs="8">
-            <Input type="text" onClick={() => {}} />
-          </Col>
-          <Col xs="2">
-            <Button onClick={() => {}}>
-              <i className='bi-zoom-in'></i>
-            </Button>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs="2">
-            <Button>
-              <i className="bi-symmetry-vertical"></i>
-            </Button>
-          </Col>
-          <Col xs="10">
-            <Button>Edit</Button>
-          </Col>
-        </Row>
-      </Row>
       <Row>
-        <Col xs="3">
-          <Button size="lg" onClick={sendStartCommand}>
-            <i className="bi-play-fill"></i>
+        <Col className="p-2" xs="12">
+          <Button onClick={requestState} className="w-100">Edit</Button>
+        </Col>
+      </Row>
+      <Row className='border-bottom'>
+        <Col>
+          <Row>
+            <Col className="pb-2" xs="12">
+              <Button className="w-100" onClick={sendMirrorCommand}>
+                <i className="bi-symmetry-vertical"></i>
+              </Button>
+            </Col>
+          </Row>
+          <Row className='px-2'>
+            <Col xs="2">
+              Speed:
+            </Col>
+            <Col xs="2">
+              <Button onClick={() => {}}>
+                <i className="bi-chevron-double-left"></i>
+              </Button>
+            </Col>
+            <Col xs="6">
+              <Input type="text" onClick={() => {}} />
+            </Col>
+            <Col xs="2">
+              <Button onClick={() => {}}>
+                <i className="bi-chevron-double-right"></i>
+              </Button>
+            </Col>
+          </Row>
+          <Row className='p-2'>
+            <Col xs="2">
+              Zoom:
+            </Col>
+            <Col xs="2">
+              <Button onClick={() => {}}>
+                <i className='bi-zoom-out'></i>
+              </Button>
+            </Col>
+            <Col xs="6">
+              <Input type="text" onClick={() => {}} />
+            </Col>
+            <Col xs="2">
+              <Button onClick={() => {}}>
+                <i className='bi-zoom-in'></i>
+              </Button>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+      <Row className='p-2'>
+        <Col xs="6">
+          <Button className="w-100" size="lg" onClick={sendSkipBackCommand}>
+            <i className="bi-skip-start-fill"></i>
           </Button>
         </Col>
-        <Col xs="3">
-          <Button size="lg" onClick={sendStopCommand}>
-            <i className="bi-pause-fill"></i>
-          </Button>
-        </Col>
-        <Col xs="3">
-          <Button size="lg" onClick={sendSkipBackCommand}>
+        <Col xs="6">
+          <Button className="w-100" size="lg" onClick={sendSkipAheadCommand}>
             <i className="bi-skip-end-fill"></i>
           </Button>
         </Col>
-        <Col xs="3">
-          <Button size="lg" onClick={sendSkipAheadCommand}>
-            <i className="bi-skip-start-fill"></i>
+      </Row>
+      <Row className='p-2'>
+        <Col xs="6">
+          <Button className="w-100" size="lg" onClick={sendStartCommand}>
+            <i className="bi-play-fill"></i>
+          </Button>
+        </Col>
+        <Col xs="6">
+          <Button className="w-100" size="lg" onClick={sendStopCommand}>
+            <i className="bi-pause-fill"></i>
           </Button>
         </Col>
       </Row>
