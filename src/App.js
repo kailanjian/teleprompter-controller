@@ -2,37 +2,36 @@ import './App.css';
 import RoomInput from './components/RoomInput'
 import TeleprompterController from './views/TeleprompterController';
 import { Spinner } from 'reactstrap';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSocket } from './utils/useSocket';
 
 function App() {
+  console.log('APP RERENDERING');
+  // CHANGE THIS FOR DEVELOPMENT
   const STUB_ROOM = true;
 
-  // CHANGE THIS FOR DEVELOPMENT
   const [loadingSocket, setLoadingSocket] = useState(true)
   const [room, setRoom] = useState(null);
-
   const socketHelper = useSocket(room);
 
-  const handlePickRoom = (room) => {
-    setRoom(room)
-    socketHelper.connectToRoom(room);
-  }
+  const handlePickRoom = useCallback((newRoom) => {
+    setRoom(newRoom)
+    socketHelper.connectToRoom(newRoom);
+  }, [socketHelper]);
 
   useEffect(() => {
-    if (!room) {
-      socketHelper.onSocketOpen(() => {
-        console.log('DEBUG: Connected to websocket!');
-        console.log(socketHelper.getState())
+    console.log('use effect called');
+    console.log(socketHelper);
+    socketHelper.onSocketOpen(() => {
+      if(STUB_ROOM) {
+        // Normally, the RoomInput UI would pick the room based on user input.
+        // But we can expedite development by shortcutting to XXXX
+        handlePickRoom('XXXX');
+      }
 
-        if(STUB_ROOM) {
-          handlePickRoom('XXXX');
-        }
-
-        setLoadingSocket(false);
-      });
-    }
-  },[room])
+      setLoadingSocket(false);
+    });
+  },[]);
 
   const renderSetup = () => {
     if (loadingSocket) {

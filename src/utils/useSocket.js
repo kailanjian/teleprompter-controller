@@ -1,5 +1,5 @@
 import { SocketContext } from './SocketProvider';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 
 // WEBSOCKET PROTOCOL
 // every message must have three components:
@@ -27,16 +27,29 @@ export const useSocket = (room) => {
   const ws = useContext(SocketContext);
 
   const onMessage = (cb) => {
-    console.log('add message event handler');
-
     ws.addEventListener('message', (event) => {
-      console.log('ws event listener triggered');
-      cb(event.data);
+      cb(JSON.parse(event.data));
     })
   }
 
+  const onReceiveCommand = (message, cb) => {
+    onMessage((data) => {
+      if (data.command === message) {
+        cb(data);
+      }
+    })
+  }
+
+  const onReceiveState = (cb) => {
+    onMessage((data) => {
+      if (!!data.state) {
+        cb(data);
+      }
+    });
+  }
+
   const onSocketOpen = (cb) => {
-    if (ws.readyState === 1) {
+    if (ws.readyState === WebSocket.OPEN) {
       cb();
     } else {
       ws.addEventListener('open', () => {
@@ -53,7 +66,6 @@ export const useSocket = (room) => {
     }
 
     console.log(`DEBUG: Sending message from controller ${JSON.stringify(msg)}`);
-
     ws.send(JSON.stringify(msg));
   }
 
@@ -72,6 +84,8 @@ export const useSocket = (room) => {
     connectToRoom,
     onSocketOpen,
     onMessage,
+    onReceiveCommand,
+    onReceiveState,
     getState
   }
 };

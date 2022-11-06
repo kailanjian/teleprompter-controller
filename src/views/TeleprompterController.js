@@ -7,9 +7,17 @@ function TeleprompterController(props) {
     room
   } = props;
 
+  const [speed, setSpeed] = useState(0);
+  const [fontSize, setFontSize] = useState(0);
+
   const requestState = (data) => {
     socketHelper.sendMessage({command: 'send_state_info'});
   }
+
+  socketHelper.onReceiveState((data) => {
+    setSpeed(data.state.speed);
+    setFontSize(data.state.fontSize)
+  });
 
   const sendStartCommand = (data) => {
     socketHelper.sendMessage({command: 'start'});
@@ -34,7 +42,6 @@ function TeleprompterController(props) {
   socketHelper.onMessage((event) => {
     console.log(event);
   });
-
 
   return (
     <Container fluid={true}>
@@ -77,7 +84,7 @@ function TeleprompterController(props) {
               </Button>
             </Col>
             <Col xs="6">
-              <Input type="text" onClick={() => {}} />
+              <Input type="text" value={speed} onClick={() => {}} />
             </Col>
             <Col xs="2">
               <Button onClick={() => {}}>
@@ -87,7 +94,7 @@ function TeleprompterController(props) {
           </Row>
           <Row className='p-2'>
             <Col xs="2">
-              Zoom:
+              Font Size:
             </Col>
             <Col xs="2">
               <Button onClick={() => {}}>
@@ -95,7 +102,7 @@ function TeleprompterController(props) {
               </Button>
             </Col>
             <Col xs="6">
-              <Input type="text" onClick={() => {}} />
+              <Input type="text" value={fontSize} onClick={() => {}} />
             </Col>
             <Col xs="2">
               <Button onClick={() => {}}>
