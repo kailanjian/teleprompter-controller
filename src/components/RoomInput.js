@@ -1,4 +1,14 @@
-import { Label, Input, Button, Card, CardBody } from 'reactstrap';
+import { 
+  Input, 
+  Button, 
+  Card, 
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Container,
+  Row,
+  Col
+} from 'reactstrap';
 import { useState } from 'react';
 
 function RoomInput(props) {
@@ -9,15 +19,22 @@ function RoomInput(props) {
   const [roomCode, setRoomCode] = useState('');
 
   return (
-    <>
-      <Card>
-        <CardBody>
-          <Label>Enter Your Room Code</Label>
-          <Input type='text' value={roomCode} onChange={(e) => setRoomCode(e.currentTarget.value)}/>
-          <Button onClick={() => {onPickRoom(roomCode)}}>Pick</Button>
-        </CardBody>
-      </Card>
-    </>
+    <Container className='d-flex vh-100'>
+      <Row className='m-auto align-self-center'>
+        <Col>
+          <Card>
+            <CardHeader>
+              <CardTitle>Mythic Teleprompter</CardTitle>
+            </CardHeader>
+            <CardBody>
+              <p>Enter your 4-digit teleprompter code to start:</p>
+              <Input className='my-2' type='text' value={roomCode} onChange={(e) => setRoomCode(e.currentTarget.value)}/>
+              <Button className='my-2' width='100%' color='primary' onClick={() => {onPickRoom(roomCode)}}>Start!</Button>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
