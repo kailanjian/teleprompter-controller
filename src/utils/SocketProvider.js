@@ -6,7 +6,7 @@ let ws;
 if (development) {
   ws = new WebSocket('ws://localhost:4444');
 } else {
-  ws = new WebSocket('wss://mythicengineering.com:4444');
+  ws = new WebSocket('wss://teleprompter-backend.c1nm24cja9baa.us-east-1.cs.amazonlightsail.com');
 }
 
 export const SocketContext = createContext(ws);

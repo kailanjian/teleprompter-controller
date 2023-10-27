@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Row, Col, Container, Input } from 'reactstrap';
+import debounce from '../utils/debounce';
 
 function TeleprompterController(props) {
   const {
@@ -9,14 +10,24 @@ function TeleprompterController(props) {
 
   const [speed, setSpeed] = useState(0);
   const [fontSize, setFontSize] = useState(0);
+  const [script, setScript] = useState('');
+  const [teleprompterWindowState, setTeleprompterWindowState] = useState({height: undefined, width: undefined})
 
   const requestState = (data) => {
     socketHelper.sendMessage({command: 'send_state_info'});
   }
 
+
   socketHelper.onReceiveState((data) => {
     setSpeed(data.state.speed);
     setFontSize(data.state.fontSize)
+    setScript(data.state.script);
+    setTeleprompterWindowState({ 
+      height: data.state.height, 
+      width: data.state.width,
+      scrollPos: data.state.scrollPos
+    });
+    document.getElementById('display-box').scrollTo(0, data.state.scrollPos)
   });
 
   const sendStartCommand = (data) => {
@@ -39,6 +50,29 @@ function TeleprompterController(props) {
     socketHelper.sendMessage({command: 'mirror'});
   }
 
+  const increaseFontSize = () => {
+    socketHelper.sendMessage({command: 'increase_font_size'});
+  }
+
+  const decreaseFontSize = () => {
+    socketHelper.sendMessage({command: 'decrease_font_size'});
+  }
+
+  const increaseSpeed = () => {
+    socketHelper.sendMessage({command: 'increase_speed'});
+  }
+
+  const decreaseSpeed = () => {
+    socketHelper.sendMessage({command: 'decrease_speed'});
+  }
+
+  const sendScrollPosCommand = () => {
+    socketHelper.sendMessage({
+      command: 'set_scroll_pos', 
+      scrollPos: document.getElementById('display-box').scrollTop
+    });
+  }
+
   socketHelper.onMessage((event) => {
     console.log(event);
   });
@@ -54,9 +88,25 @@ function TeleprompterController(props) {
         </Col>
       </Row>
       <Row className='border-2 border-bottom'>
-        <Col>
-          <div className="display-box">
-            Display text here
+        <Col style={{ height: teleprompterWindowState.height*0.3 }} maxHeight={teleprompterWindowState.height*0.3}>
+          <div 
+            height="80px" 
+            style={{ 
+              height: teleprompterWindowState.height,
+              width: teleprompterWindowState.width,
+              fontSize: fontSize, 
+              transform: `scale(0.3, 0.3)`,
+              transformOrigin: 'top',
+              overflow: 'scroll',
+              whiteSpace: 'pre-wrap',
+              textAlign: 'left'
+            }} 
+            // className="display-box"
+            id="display-box"
+            // this introduces a bug that the UI locks up when you hit play
+            onScroll={(e) => {console.log(e); debounce(sendScrollPosCommand);}}
+          >
+            {script}
           </div>
         </Col>
       </Row>
@@ -79,7 +129,7 @@ function TeleprompterController(props) {
               Speed:
             </Col>
             <Col xs="2">
-              <Button onClick={() => {}}>
+              <Button onClick={() => {decreaseSpeed()}}>
                 <i className="bi-chevron-double-left"></i>
               </Button>
             </Col>
@@ -87,7 +137,7 @@ function TeleprompterController(props) {
               <Input type="text" value={speed} onClick={() => {}} />
             </Col>
             <Col xs="2">
-              <Button onClick={() => {}}>
+              <Button onClick={() => {increaseSpeed()}}>
                 <i className="bi-chevron-double-right"></i>
               </Button>
             </Col>
@@ -97,7 +147,7 @@ function TeleprompterController(props) {
               Font Size:
             </Col>
             <Col xs="2">
-              <Button onClick={() => {}}>
+              <Button onClick={() => {decreaseFontSize()}}>
                 <i className='bi-zoom-out'></i>
               </Button>
             </Col>
@@ -105,7 +155,7 @@ function TeleprompterController(props) {
               <Input type="text" value={fontSize} onClick={() => {}} />
             </Col>
             <Col xs="2">
-              <Button onClick={() => {}}>
+              <Button onClick={() => {increaseFontSize()}}>
                 <i className='bi-zoom-in'></i>
               </Button>
             </Col>

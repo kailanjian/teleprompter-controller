@@ -59,6 +59,11 @@ export const useSocket = (room) => {
   }
 
   const sendMessage = (data) => {
+    if (ws.readyState != WebSocket.OPEN) {
+      console.log('SOCKET CLOSED!');
+      return;
+    }
+
     const msg = {
       sender: 'controller',
       id: room,
